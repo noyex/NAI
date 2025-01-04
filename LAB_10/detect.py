@@ -91,3 +91,5 @@ for model_name, (model_path, model) in models.items():
         output = model(image_tensor)
         predicted_class = output.argmax(1).item()
         print(f"{model_name}: Predicted class is {classes[predicted_class]}")
+
+# base model radzi sobie najlepiej
