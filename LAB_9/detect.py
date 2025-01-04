@@ -1,6 +1,8 @@
 import torch
 from torchvision import transforms
 from PIL import Image
+import matplotlib.pyplot as plt
+import numpy as np
 
 class NeuralNetwork(torch.nn.Module):
     def __init__(self):
@@ -18,7 +20,6 @@ class NeuralNetwork(torch.nn.Module):
         x = self.flatten(x)
         logits = self.linear_relu_stack(x)
         return logits
-
 
 image_path = "bag.jpg"
 
@@ -40,11 +41,10 @@ except Exception as e:
 
 image_tensor = transform(image).unsqueeze(0)
 
-
 with torch.no_grad():
     output = model(image_tensor)
-    predicted_class = output.argmax(1).item()
-
+    probabilities = torch.nn.functional.softmax(output[0], dim=0)
+    predicted_class = probabilities.argmax().item()
 
 classes = [
     "T-shirt/top", "Trouser", "Pullover", "Dress", "Coat",
@@ -52,3 +52,19 @@ classes = [
 ]
 
 print(f"Predicted class: {classes[predicted_class]}")
+print(f"Probabilities: {probabilities}")
+
+plt.figure(figsize=(10, 5))
+plt.bar(classes, probabilities.numpy(), color="blue")
+plt.title("Class Probabilities")
+plt.xlabel("Class")
+plt.ylabel("Probability")
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+plt.figure(figsize=(5, 5))
+plt.imshow(image_tensor.squeeze(), cmap="gray")
+plt.title(f"Prediction: {classes[predicted_class]} ({probabilities[predicted_class]:.2f})")
+plt.axis("off")
+plt.show()
