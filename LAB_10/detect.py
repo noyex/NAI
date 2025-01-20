@@ -69,7 +69,7 @@ transform = transforms.Compose([
     transforms.Normalize((0.5,), (0.5,))
 ])
 
-image_path = "sandal.jpg"
+image_path = "tshirt.jpg"
 image = Image.open(image_path).convert("L")
 image_tensor = transform(image).unsqueeze(0)
 
@@ -92,4 +92,4 @@ for model_name, (model_path, model) in models.items():
         predicted_class = output.argmax(1).item()
         print(f"{model_name}: Predicted class is {classes[predicted_class]}")
 
-# base model radzi sobie najlepiej
+# model 2 radzi sobie najlepiej
